@@ -1,10 +1,5 @@
 {
     "queryStringParameters": {
-      "username": "wwwww"
-    },
-    "requestContext": {
-        "identity": {
-          "cognitoIdentityId": "249114ba-f9d2-4561-8575-e2556fae95f9"
-        }
-      }
+      "userid": "c4b1b0ac-83de-455a-a776-110cc2ef4e8e"
+    }
   }
