@@ -5,13 +5,12 @@ export const main = handler(async (event, context) => {
   const params = {
     TableName: process.env.tableNameUsers,
     KeyConditionExpression: "application = :app and begins_with(username, :usernamePrefix)",
+    Limit: 25,
     ExpressionAttributeValues: {
       ":app" : "jscore",
       ":usernamePrefix": event.queryStringParameters.usernamePrefix
     }
   };
-
-  console.log("params="+JSON.stringify(params));
 
   const result = await dynamoDb.query(params);
 
