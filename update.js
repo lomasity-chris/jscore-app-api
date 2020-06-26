@@ -5,13 +5,14 @@ export const main = handler(async (event, context) => {
   console.log("event=" + JSON.stringify(event));
   const data = JSON.parse(event.body);
   console.log("data="+data.following);
+
   const params = {
-    TableName: process.env.tableNameUser,
+    TableName: process.env.tableNameUserProfile,
     Key: {
-      userid: data.userid,
+      username: event.pathParameters.username,
     },
     UpdateExpression: "set following = :f",
-    AttributeValues: {
+    ExpressionAttributeValues: {
       ":f": data.following,
     },
     ReturnValues: "UPDATED_NEW",

@@ -47,18 +47,18 @@ functions:
           path: users/{username}
           method: get
           cors: true
-  query:
+  search:
     handler: search.main
     events:
       - http:
-          path: jscore/users
+          path: users
           method: get
           cors: true
   update:
     handler: update.main
     events:
       - http:
-          path: jscore
+          path: users/{username}
           method: put
           cors: true
   create:

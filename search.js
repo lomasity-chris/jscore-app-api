@@ -4,11 +4,11 @@ import dynamoDb from "./libs/dynamodb-lib";
 export const main = handler(async (event, context) => {
   const params = {
     TableName: process.env.tableNameUsers,
-    KeyConditionExpression: "application = :app and begins_with(username, :usernamePrefix)",
+    KeyConditionExpression: "application = :app and begins_with(username, :startsWith)",
     Limit: 25,
     ExpressionAttributeValues: {
       ":app" : "jscore",
-      ":usernamePrefix": event.queryStringParameters.usernamePrefix
+      ":startsWith": event.queryStringParameters.startsWith
     }
   };
 
