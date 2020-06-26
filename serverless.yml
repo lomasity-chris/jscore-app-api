@@ -18,7 +18,7 @@ provider:
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    tableNameUser: jscore-user
+    tableNameUserProfile: jscore-user-profile
     tableNameUsers: jscore-users
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
@@ -40,11 +40,11 @@ provider:
       Resource: "arn:aws:logs:*:*:*"
 
 functions:
-  get:
-    handler: get.main
+  getUser:
+    handler: read.main
     events:
       - http:
-          path: jscore
+          path: jscore/users/{username}
           method: get
           cors: true
   query:
@@ -56,6 +56,13 @@ functions:
           cors: true
   update:
     handler: update.main
+    events:
+      - http:
+          path: jscore
+          method: put
+          cors: true
+  create:
+    handler: create.main
     events:
       - http:
           path: jscore
