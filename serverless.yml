@@ -40,18 +40,18 @@ provider:
       Resource: "arn:aws:logs:*:*:*"
 
 functions:
-  getUser:
+  read:
     handler: read.main
     events:
       - http:
-          path: jscore/users/{username}
+          path: users/{username}
           method: get
           cors: true
   query:
     handler: search.main
     events:
       - http:
-          path: jscore/search
+          path: jscore/users
           method: get
           cors: true
   update:
@@ -65,7 +65,7 @@ functions:
     handler: create.main
     events:
       - http:
-          path: jscore
+          path: users
           method: post
           cors: true
     #      authorizer: aws_iam

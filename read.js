@@ -4,7 +4,7 @@ import dynamoDb from "./libs/dynamodb-lib";
 export const main = handler(async (event, context) => {
   console.log(event);
   const params = {
-    TableName: process.env.tableNameUser,
+    TableName: process.env.tableNameUserProfile,
     Key: {
       username: event.pathParameters.username
     },
