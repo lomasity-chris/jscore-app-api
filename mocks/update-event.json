@@ -1,6 +1,6 @@
 
 {
-  "body": "{\"userid\":\"746effbf-8fcf-4552-a740-9128ca7548e0\",\"following\":[]}",
+  "body": "{\"userid\":\"746effbf-8fcf-4552-a740-9128ca7548e0\",\"following\":[],\"latestMatch\":{}}",
     "pathParameters": {
       "username": "chris"
     }

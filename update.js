@@ -11,9 +11,11 @@ export const main = handler(async (event, context) => {
     Key: {
       username: event.pathParameters.username,
     },
-    UpdateExpression: "set following = :f",
+    UpdateExpression: "set following = :f, latestMatch = :m, updated = :d",
     ExpressionAttributeValues: {
       ":f": data.following,
+      ":m": data.latestMatch,
+      ":d": new Date().toISOString(),
     },
     ReturnValues: "UPDATED_NEW",
   };
