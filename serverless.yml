@@ -12,14 +12,13 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: prod
+  stage: dev
   region: eu-west-2
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    tableNameUserProfile: jscore-user-profile
-    tableNameUsers: jscore-users
+    tableNameJScore: jscore
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -31,6 +30,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:PostItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:eu-west-2:*:*"
@@ -54,18 +54,32 @@ functions:
           path: users
           method: get
           cors: true
-  update:
-    handler: update.main
+  searchFollowed:
+    handler: searchFollowed.main
     events:
       - http:
-          path: users/{username}
-          method: put
+          path: users/{username}/followed
+          method: get
           cors: true
-  create:
-    handler: create.main
+  createMatch:
+    handler: createMatch.main
     events:
       - http:
-          path: users
+          path: users/{username}/matches
           method: post
+          cors: true
+  createFollowed:
+    handler: createFollowed.main
+    events:
+      - http:
+          path: users/{username}/followed/{followedUsername}
+          method: post
+          cors: true
+  deleteFollowed:
+    handler: deleteFollowed.main
+    events:
+      - http:
+          path: users/{username}/followed/{followedUsername}
+          method: delete
           cors: true
     #      authorizer: aws_iam

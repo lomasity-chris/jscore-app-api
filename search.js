@@ -3,8 +3,8 @@ import dynamoDb from "./libs/dynamodb-lib";
 
 export const main = handler(async (event, context) => {
   const params = {
-    TableName: process.env.tableNameUsers,
-    KeyConditionExpression: "application = :app and begins_with(username, :startsWith)",
+    TableName: process.env.tableNameJScore,
+    KeyConditionExpression: "primaryKey = :app and begins_with(sortKey, :startsWith)",
     Limit: 25,
     ExpressionAttributeValues: {
       ":app" : "jscore",
@@ -12,8 +12,11 @@ export const main = handler(async (event, context) => {
     }
   };
 
-  const result = await dynamoDb.query(params);
-
-  // Return the matching list of items in response body
-  return result.Items;
+  var users = new Map;
+  await dynamoDb.query(params).then((result) => {
+    result.Items.map((item) => {
+      users[item.sortKey] = { username: item.sortKey, fullName: item.fullName };
+    });
+  });
+  return users;
 });

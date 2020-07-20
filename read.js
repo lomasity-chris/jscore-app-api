@@ -3,23 +3,32 @@ import dynamoDb from "./libs/dynamodb-lib";
 
 export const main = handler(async (event, context) => {
   console.log(event);
+
+  var response = {};
+  response.username = event.pathParameters.username;
+
   const params = {
-    TableName: process.env.tableNameUserProfile,
+    TableName: process.env.tableNameJScore,
     Key: {
-      username: event.pathParameters.username
+      primaryKey: "jscore",
+      sortKey: event.pathParameters.username
     },
   };
 
   console.log("params=" + JSON.stringify(params));
-  const result = await dynamoDb.get(params).catch((err) => {
-    console.log("!!!!!!!!!!!!!! " + err.message);
+  await dynamoDb.get(params).then((res) => {
+
+    if (!res.Item) {
+      console.log("ERROR");
+      throw new Error("Item not found.");
+    }
+
+    response.fullName = res.Item.fullName;
+    response.avatar = res.Item.avatar;
+  }).catch((err) => {
+    console.error(err.message);
     throw new Error("Item not found.");
   });
-  if (!result.Item) {
-    console.log("ERROR");
-    throw new Error("Item not found.");
-  }
 
-  // Return the retrieved item
-  return result.Item;
+  return response;
 });

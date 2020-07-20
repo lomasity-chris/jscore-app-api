@@ -1,3 +1,3 @@
 {
-  "body": "{\"username\":\"Chris1\",\"fullName\":\"Chris Rodgers\",\"email\":\"chris.rodgers@talk21.com\",\"following\":[\"Tracey\"],\"userId\":\"userId-chris\"}"
+  "body": "{\"username\":\"Chris1\",\"fullName\":\"Chris Rodgers\",\"email\":\"chris.rodgers@talk21.com\",\"followed\":[\"Tracey\"],\"userId\":\"userId-chris\"}"
 }
