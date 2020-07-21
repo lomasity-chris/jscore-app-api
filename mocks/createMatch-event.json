@@ -1,0 +1,4 @@
+{
+  "pathParameters": "{\"username\": \"tracey\"}",
+  "body": "{\"match\":{\"sport\": \"badminton\", \"format\": \"singles\", \"teams\": {\"home\": {\"players\": [{\"id\": \"h1\", \"name\": \"Player 1\"}]},\"away\": {\"players\": [{\"id\": \"a1\",\"name\": \"Player 2\"}]}}}, \"scoring\": {\"gamesTarget\": 1,\"pointsTarget\": 21,\"setting\": true,\"finished\": false,\"games\": [{\"pointsHistory\": 2,\"pointsPlayed\": 3,\"currentScore\": {\"home\": 2,\"away\": 1}}]},\"fullName\": \"Tracey Rodgers\"}"
+}

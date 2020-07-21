@@ -68,6 +68,13 @@ functions:
           path: users/{username}/matches
           method: post
           cors: true
+  searchMatches:
+    handler: searchMatches.main
+    events:
+      - http:
+          path: users/{username}/matches
+          method: get
+          cors: true
   createFollowed:
     handler: createFollowed.main
     events:
