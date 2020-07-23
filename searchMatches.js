@@ -6,6 +6,7 @@ export const main = handler(async (event, context) => {
     TableName: process.env.tableNameJScore,
     KeyConditionExpression: "primaryKey = :username and begins_with(sortKey, :startsWith)",
     Limit: 25,
+    ScanIndexForward: false,
     ExpressionAttributeValues: {
       ":username": event.pathParameters.username,
       ":startsWith": "match#",
