@@ -1,0 +1,7 @@
+{
+  "pathParameters": {
+    "username": "testuser",
+    "followingUsername": "testFollowing" 
+  },
+  "body": "{\"fullName\":\"Test Following\"}"
+}

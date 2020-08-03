@@ -9,7 +9,7 @@ export const main = handler(async (event, context) => {
     TableName: process.env.tableNameJScore,
     Item: {
       primaryKey: event.pathParameters.username,
-      sortKey: "followed#" + event.pathParameters.followedUsername,
+      sortKey: "following#" + event.pathParameters.followingUsername,
       fullName: data.fullName,
       created: d.toISOString(),
       updated: d.toISOString(),
@@ -18,5 +18,5 @@ export const main = handler(async (event, context) => {
 
   await dynamoDb.create(params);
 
-  return { username: event.pathParameters.username, followedUsername: event.pathParameters.followedUsername, fullName: data.fullName };
+  return { username: event.pathParameters.username, followingUsername: event.pathParameters.followingUsername, fullName: data.fullName };
 });

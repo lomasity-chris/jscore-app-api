@@ -6,7 +6,7 @@ export const main = handler(async (event, context) => {
     TableName: process.env.tableNameJScore,
     Key: {
       primaryKey: event.pathParameters.username,
-      sortKey: "followed#" + event.pathParameters.followedUsername,
+      sortKey: "following#" + event.pathParameters.followingUsername,
     },
   };
 

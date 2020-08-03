@@ -8,16 +8,16 @@ export const main = handler(async (event, context) => {
     Limit: 25,
     ExpressionAttributeValues: {
       ":username": event.pathParameters.username,
-      ":startsWith": "followed#",
+      ":startsWith": "following#",
     },
   };
 
-  var followed = new Map;
+  var following = new Map;
   await dynamoDb.query(params).then((result) => {
     result.Items.map((item) => {
       const username = item.sortKey.substring(item.sortKey.indexOf("#") + 1);
-      followed[username] = {fullName: item.fullName };
+      following[username] = {fullName: item.fullName };
     });
   });
-  return followed;
+  return following;
 });

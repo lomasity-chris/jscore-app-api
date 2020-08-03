@@ -54,11 +54,11 @@ functions:
           path: users
           method: get
           cors: true
-  searchFollowed:
-    handler: searchFollowed.main
+  searchFollowing:
+    handler: searchFollowing.main
     events:
       - http:
-          path: users/{username}/followed
+          path: users/{username}/following
           method: get
           cors: true
   createMatch:
@@ -75,18 +75,18 @@ functions:
           path: users/{username}/matches
           method: get
           cors: true
-  createFollowed:
-    handler: createFollowed.main
+  createFollowing:
+    handler: createFollowing.main
     events:
       - http:
-          path: users/{username}/followed/{followedUsername}
+          path: users/{username}/following/{followingUsername}
           method: post
           cors: true
-  deleteFollowed:
-    handler: deleteFollowed.main
+  deleteFollowing:
+    handler: deleteFollowing.main
     events:
       - http:
-          path: users/{username}/followed/{followedUsername}
+          path: users/{username}/following/{followingUsername}
           method: delete
           cors: true
     #      authorizer: aws_iam
