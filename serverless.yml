@@ -19,6 +19,7 @@ provider:
   # under process.env.
   environment:
     tableNameJScore: jscore
+    userPoolId: eu-west-2_0xzoObEoi
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -38,6 +39,10 @@ provider:
       Action:
         - logs:*
       Resource: "arn:aws:logs:*:*:*"
+    - Effect: 'Allow'
+      Action: 
+        - cognito-idp:ListUsers
+      Resource: "arn:aws:cognito-idp:eu-west-2:523070501937:userpool/eu-west-2_0xzoObEoi"
 
 functions:
   read:
@@ -75,6 +80,7 @@ functions:
           path: users/{username}/matches
           method: get
           cors: true
+          authorizer: aws_iam
   createFollowing:
     handler: createFollowing.main
     events:

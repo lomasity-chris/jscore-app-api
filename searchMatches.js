@@ -1,7 +1,20 @@
 import handler from "./libs/handler-lib";
 import dynamoDb from "./libs/dynamodb-lib";
+import AWS from "aws-sdk";
 
 export const main = handler(async (event, context) => {
+  const provider = event.requestContext.identity.cognitoAuthenticationProvider;
+  const sub = provider.split(":")[2];
+  const cognitoParams = {
+    UserPoolId: process.env.userPoolId,
+    Filter: 'sub="' + sub + '"',
+    Limit: 1,
+  };
+
+  var cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+  const data = await cognitoIdentityServiceProvider.listUsers(cognitoParams).promise();
+  var callersUserName = data.Users[0].Username;
+
   const params = {
     TableName: process.env.tableNameJScore,
     KeyConditionExpression: "primaryKey = :username and begins_with(sortKey, :startsWith)",
@@ -13,11 +26,14 @@ export const main = handler(async (event, context) => {
     },
   };
 
-  var matches = new Map;
+  var matches = new Map();
   await dynamoDb.query(params).then((result) => {
     result.Items.map((item) => {
-      const matchTimetoken = item.sortKey.substring(item.sortKey.indexOf("#") + 1);
-      matches[matchTimetoken] = item.match;
+      // Only public matches or the users own matches can be returned
+      if (!item.match.privateMatch || item.primaryKey === callersUserName) {
+        const matchTimetoken = item.sortKey.substring(item.sortKey.indexOf("#") + 1);
+        matches[matchTimetoken] = item.match;
+      }
     });
   });
   return matches;
