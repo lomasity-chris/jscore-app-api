@@ -19,6 +19,7 @@ provider:
   # under process.env.
   environment:
     tableNameJScore: jscore
+    userPrimaryKey: jscore
     userPoolId: eu-west-2_0xzoObEoi
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.

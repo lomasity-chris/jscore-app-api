@@ -7,7 +7,7 @@ export const main = handler(async (event, context) => {
     KeyConditionExpression: "primaryKey = :app and begins_with(sortKey, :startsWith)",
     Limit: 25,
     ExpressionAttributeValues: {
-      ":app" : "jscore",
+      ":app" : process.env.userPoolId,
       ":startsWith": event.queryStringParameters.startsWith
     }
   };
