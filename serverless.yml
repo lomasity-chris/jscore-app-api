@@ -82,12 +82,12 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
-  createFollowing:
-    handler: createFollowing.main
+  updateFollowing:
+    handler: updateFollowing.main
     events:
       - http:
-          path: users/{username}/following/{followingUsername}
-          method: post
+          path: users/{username}/following
+          method: put
           cors: true
   deleteFollowing:
     handler: deleteFollowing.main

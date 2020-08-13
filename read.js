@@ -25,6 +25,8 @@ export const main = handler(async (event, context) => {
 
     response.fullName = res.Item.fullName;
     response.avatar = res.Item.avatar;
+    response.following = res.Item.following;
+    response.followedBy = res.Item.followedBy;
   }).catch((err) => {
     console.error(err.message);
     throw new Error("Item not found.");

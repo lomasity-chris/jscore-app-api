@@ -7,7 +7,7 @@ export const main = handler(async (event, context) => {
     KeyConditionExpression: "primaryKey = :app and begins_with(sortKey, :startsWith)",
     Limit: 25,
     ExpressionAttributeValues: {
-      ":app" : process.env.userPoolId,
+      ":app" : process.env.userPrimaryKey,
       ":startsWith": event.queryStringParameters.startsWith
     }
   };
@@ -15,7 +15,7 @@ export const main = handler(async (event, context) => {
   var users = new Map;
   await dynamoDb.query(params).then((result) => {
     result.Items.map((item) => {
-      users[item.sortKey] = { username: item.sortKey, fullName: item.fullName };
+      users[item.sortKey] = { fullName: item.fullName };
     });
   });
   return users;

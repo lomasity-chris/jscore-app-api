@@ -3,8 +3,11 @@ import dynamoDb from "./libs/dynamodb-lib";
 
 export const main = handler(async (event, context) => {
   console.log(JSON.stringify(event));
+  const data = JSON.parse(event.body);
+  const followingUsername = Object.keys(data.following)[0];
+  const followingFullName = Object.values(data.following)[0];
   const followedByUsername = event.pathParameters.username;
-  const followingUsername = event.pathParameters.followingUsername;
+  const followedByFullName = data.followedByFullName;
   const updateDate = new Date().toISOString();
 
   var params = {
@@ -13,9 +16,10 @@ export const main = handler(async (event, context) => {
       primaryKey: process.env.userPrimaryKey,
       sortKey: followedByUsername,
     },
-    UpdateExpression: "REMOVE following.#followingUsername SET updated = :d",
+    UpdateExpression: "SET following.#followingUsername = :f, updated = :d",
     ExpressionAttributeNames: { "#followingUsername": followingUsername },
     ExpressionAttributeValues: {
+      ":f": followingFullName,
       ":d": updateDate,
     },
   };
@@ -34,20 +38,21 @@ export const main = handler(async (event, context) => {
       primaryKey: process.env.userPrimaryKey,
       sortKey: followingUsername,
     },
-    UpdateExpression: "REMOVE followedBy.#followedByUsername SET updated = :d",
+    UpdateExpression: "SET followedBy.#followedByUsername = :f, updated = :d",
     ExpressionAttributeNames: { "#followedByUsername": followedByUsername },
     ExpressionAttributeValues: {
+      ":f": followedByFullName,
       ":d": updateDate,
     },
   };
 
   await dynamoDb.update(params, function (err, data) {
     if (err) {
-      console.error("Unable to update following. Error JSON:", JSON.stringify(err, null, 2));
+      console.error("Unable to update followedBy. Error JSON:", JSON.stringify(err, null, 2));
     } else {
-      console.log("Update following succeeded:", JSON.stringify(data, null, 2));
+      console.log("Update followedBy succeeded:", JSON.stringify(data, null, 2));
     }
   });
 
-  return { username: event.pathParameters.username, followingUsername: event.pathParameters.followingUsername };
+  return { username: event.pathParameters.username, following: data.following };
 });
