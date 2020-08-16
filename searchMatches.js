@@ -26,13 +26,12 @@ export const main = handler(async (event, context) => {
     },
   };
 
-  var matches = new Map();
+  var matches = [];
   await dynamoDb.query(params).then((result) => {
     result.Items.map((item) => {
       // Only public matches or the users own matches can be returned
       if (!item.match.privateMatch || item.primaryKey === callersUserName) {
-        const matchTimetoken = item.sortKey.substring(item.sortKey.indexOf("#") + 1);
-        matches[matchTimetoken] = item.match;
+        matches.push(item.match);
       }
     });
   });

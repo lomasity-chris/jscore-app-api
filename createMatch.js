@@ -7,6 +7,7 @@ export const main = handler(async (event, context) => {
 
   const data = JSON.parse(event.body);
   const d = new Date();
+  data.match.timestamp = d.getTime();
 
   const params = {
     TableName: process.env.tableNameJScore,
