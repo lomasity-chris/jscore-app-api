@@ -29,8 +29,8 @@ export const main = handler(async (event, context) => {
   var matches = [];
   await dynamoDb.query(params).then((result) => {
     result.Items.map((item) => {
-      // Only public matches or the users own matches can be returned
-      if (!item.match.privateMatch || item.primaryKey === callersUserName) {
+      // Only public matches, the users own matches or mathces the owner has shared with the user can be returned
+      if (item.primaryKey === callersUserName || (!item.match.privateMatch && (item.match.publishTo === "*" || item.match.publishTo === callersUserName))) {
         matches.push(item.match);
       }
     });
