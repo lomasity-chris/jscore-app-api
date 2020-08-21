@@ -3,28 +3,25 @@ import dynamoDb from "./libs/dynamodb-lib";
 
 export const main = handler(async (event, context) => {
   console.log(JSON.stringify(event));
-  const data = JSON.parse(event.body);
-  const followingUsername = Object.keys(data.following)[0];
-  const followingFullName = Object.values(data.following)[0];
-  const followedByUsername = event.pathParameters.username;
-  const followedByFullName = data.followedByFullName;
-  const updateDate = new Date().toISOString();
 
-  var params = {
+  const data = JSON.parse(event.body);
+
+  console.log("updateFollowing");
+
+  const updateFollowingParams = {
     TableName: process.env.tableNameJScore,
     Key: {
       primaryKey: process.env.userPrimaryKey,
-      sortKey: followedByUsername,
+      sortKey: event.pathParameters.username,
     },
-    UpdateExpression: "SET following.#followingUsername = :f, updated = :d",
-    ExpressionAttributeNames: { "#followingUsername": followingUsername },
+    UpdateExpression: "set following = :f, updated = :d",
     ExpressionAttributeValues: {
-      ":f": followingFullName,
-      ":d": updateDate,
+      ":f": data.following,
+      ":d": new Date().toISOString(),
     },
   };
 
-  await dynamoDb.update(params, function (err, data) {
+  await dynamoDb.update(updateFollowingParams, function (err, data) {
     if (err) {
       console.error("Unable to update following. Error JSON:", JSON.stringify(err, null, 2));
     } else {
@@ -32,27 +29,46 @@ export const main = handler(async (event, context) => {
     }
   });
 
-  params = {
+  console.log("updateFollowedBy");
+
+  const followingUsername = Object.keys(data.following)[0];
+  const readParams = {
     TableName: process.env.tableNameJScore,
     Key: {
       primaryKey: process.env.userPrimaryKey,
       sortKey: followingUsername,
     },
-    UpdateExpression: "SET followedBy.#followedByUsername = :f, updated = :d",
-    ExpressionAttributeNames: { "#followedByUsername": followedByUsername },
+  };
+
+  var newFollowedBy = {};
+
+  await dynamoDb.get(readParams).then((res) => {
+    newFollowedBy = {
+      ...res.followedBy,
+      [event.pathParameters.username]: { fullName: data.followedByFullName },
+    };
+  });
+
+  console.log("newFollowedBy" + JSON.stringify(newFollowedBy));
+
+  const updateFollowedByParams = {
+    TableName: process.env.tableNameJScore,
+    Key: {
+      primaryKey: process.env.userPrimaryKey,
+      sortKey: followingUsername,
+    },
+    UpdateExpression: "set followedBy = :f, updated = :d",
     ExpressionAttributeValues: {
-      ":f": followedByFullName,
-      ":d": updateDate,
+      ":f": newFollowedBy,
+      ":d": new Date().toISOString(),
     },
   };
 
-  await dynamoDb.update(params, function (err, data) {
+  await dynamoDb.update(updateFollowedByParams, function (err, data) {
     if (err) {
-      console.error("Unable to update followedBy. Error JSON:", JSON.stringify(err, null, 2));
+      console.error("Unable to update followed by. Error JSON:", JSON.stringify(err, null, 2));
     } else {
-      console.log("Update followedBy succeeded:", JSON.stringify(data, null, 2));
+      console.log("Update followed by succeeded:", JSON.stringify(data, null, 2));
     }
   });
-
-  return { username: event.pathParameters.username, following: data.following };
 });
